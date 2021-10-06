@@ -1,4 +1,4 @@
-from unet import UNet
+from models import UNet, UNetSmall
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -17,7 +17,7 @@ def parse():
     parser.add_argument('--path_dataset', type=str,
             default='./datasets/')
     parser.add_argument('--size_batch', type=int,
-            default=32)
+            default=8)
     parser.add_argument('--num_epoch', type=int,
             default=2)
     parser.add_argument('--dev', type=str,
@@ -73,7 +73,7 @@ def main(args):
             shuffle=True, num_workers=8)
 
     # Model
-    model = UNet(1, 2).to(args.dev)
+    model = UNetSmall(1, 2).to(args.dev)
 
     # Loss
     loss_mse = nn.MSELoss()
