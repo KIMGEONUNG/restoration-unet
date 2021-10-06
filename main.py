@@ -58,6 +58,10 @@ def post_lab(x):
     return x
 
 
+def loss_hist(x1, x2):
+    pass
+
+
 def main(args):
     print(args)
 
@@ -73,16 +77,16 @@ def main(args):
             shuffle=True, num_workers=8)
 
     # Model
-    model = UNetSmall(1, 2).to(args.dev)
+    model = UNet(1, 2).to(args.dev)
 
     # Loss
-    loss_mse = nn.MSELoss()
+    loss_fn = nn.MSELoss()
 
     # Optimizer
     optimizer = optim.Adam(model.parameters())
 
     # Logger
-    writer = SummaryWriter('runs/unet')
+    writer = SummaryWriter('runs/colorize')
 
     for epoch in range(args.num_epoch):
         for i, (x, _) in enumerate(tqdm(dataloader)):
@@ -93,7 +97,7 @@ def main(args):
             x = x[:, :1, :, :].to(args.dev)
 
             y_hat = model(x)
-            loss = loss_mse(y, y_hat)
+            loss = loss_fn(y, y_hat)
 
             optimizer.zero_grad()
             loss.backward()
